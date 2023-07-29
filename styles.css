@@ -1,0 +1,14 @@
+#title {
+  color: rgba(106, 0, 255, 0.446); /* Sets the text color to blue */
+  font-size: 18px; /* Sets the font size to 18 pixels */
+  background-color: rgb(0, 242, 255); /* Sets the background color to yellow */
+  padding: 10px; /* Adds 10 pixels of padding around the content */
+  border: 2px solid black; /* Adds a 2-pixel black border */
+  text-align: center; /* Centers the text horizontally */
+}
+
+#chart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
