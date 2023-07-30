@@ -233,7 +233,7 @@ function EVLineGraphDecade() {
 }
 
 function EVDataPerYear(year) {
-    var margin = { top: 40, right: 40, bottom: 200, left: 70 },
+    var margin = { top: 40, right: 40, bottom: 150, left: 70 },
         width = 840 - margin.left - margin.right,
         height = 680 - margin.top - margin.bottom;
 
@@ -282,6 +282,50 @@ function EVDataPerYear(year) {
                 sumData: values.length
             }));
 
+            // Features of the annotation
+            const annotations = [
+                {
+                    note: {
+                        label: "Only few EV Manufacuring Company is selling above average sale of Non-Tesla EV Vehicles",
+                        title: "Average # of Sold Vehicles in " + dateFormatter(year),
+                        wrap: 200,
+                    },
+                    connector: {
+                        end: "arrow",
+                    },
+                    x: 644,
+                    y: 355,
+                    dx: -30,
+                    dy: -40,
+                },
+                {
+                    note: {
+                        title: "Click any Bar Grpah",
+                        label: "To drill-down the Total Sales of EV in " + dateFormatter(year) + " for the specific car Make",
+                        align: "left",
+                        wrap: 200,
+                    },
+                    x: 472,
+                    y: 90,
+                    dx: 0,
+                    dy: 0,
+                    color: ["green"]
+                },
+                {
+                    connector: {
+                        end: "arrow",
+                    },
+                    x: 440,
+                    y: 190,
+                    dx: 30,
+                    dy: -50
+                },
+            ]
+            // Add annotation to the chart
+            const makeAnnotations = d3.annotation()
+                .type(d3.annotationLabel)
+                .annotations(annotations)
+
             var xScale = d3.scaleBand()
                 // .domain([d3.min(data, function(d) { return d.x; }), d3.max(data, function(d) { return d.x; })])
                 .domain(d3.map(summedData,
@@ -294,6 +338,38 @@ function EVDataPerYear(year) {
             var yScale = d3.scaleLinear()
                 .domain([0, d3.max(summedData, function (d) { return d.sumData; }) + 200])
                 .range([height, 0]);
+
+            var yScale1 = d3.scaleLinear()
+                .domain([0, d3.max(summedData, function (d) { return d.sumData; })])
+                .range([height, 0]);
+
+            var xScale1 = d3.scaleBand()
+                // .domain([d3.min(data, function(d) { return d.x; }), d3.max(data, function(d) { return d.x; })])
+                .domain(d3.map(summedData,
+                    function (d) {
+                        return d.x;
+                    }))
+                .range([0, width]);
+
+            const averageY = d3.mean(summedData, d => d.sumData);
+            console.log('Average of Y values:', averageY);
+
+            var line = d3.line()
+                .x(function (d) { return xScale1(d.x); })
+                .y(yScale1(averageY));
+
+            svg.append("path")
+                .datum(summedData)
+                .attr("d", line)
+                .attr("stroke", "orange")
+                .attr("stroke-width", 2)
+                .attr("fill", "none");
+
+            // Annotation
+            svg.append("g")
+                .attr("class", "annotation-group")
+                .call(makeAnnotations);
+
 
             // Create the bars
             svg.attr("transform", `translate(${margin.left}, ${margin.top})`)
@@ -421,6 +497,31 @@ function EVDataPerMakePerYear(year, make) {
                 x: x,
                 sumData: values.length
             }));
+
+            const annotations = [
+                {
+                    note: {
+                        title: "Total sale of EV in " + make + " across multiple Models in " + year,
+                        label: "",
+                        align: "middle",
+                        wrap: 500,
+                    },
+                    x: 0,
+                    y: 220,
+                    dx: 0,
+                    dy: 0,
+                    color: ["green"]
+                },
+            ]
+            // Add annotation to the chart
+            const makeAnnotations = d3.annotation()
+                .type(d3.annotationLabel)
+                .annotations(annotations);
+
+            // Annotation
+            svg.append("g")
+                .attr("class", "annotation-group")
+                .call(makeAnnotations);
 
             // Define the pie layout
             const pie = d3.pie()
