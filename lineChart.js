@@ -28,117 +28,129 @@ var svg = d3.select("#chart")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+EVLineGraphDecade();
 // Read the CSV file
-d3.csv("Electric_Vehicle_Population_Data.csv", function (d) {
-    return {
-        x: +d.year,
-        y: +d.vin
-    };
-})
-    .then(function (data) {
-        // X and Y scales
-        const parseDate = d3.timeParse("%Y");
-        data.forEach(function (d) {
-            d.x = parseDate(d.x);
-        });
+function EVLineGraphDecade() {
 
-        // Step 2: Group and sum the data for each year
-        const groupedData = d3.group(data, d => d.x);
-        const summedData = Array.from(groupedData, ([x, values]) => ({
-            x: x,
-            sumData: values.length
-        }));
+    // Set the dimensions of the canvas
+    var margin = { top: 40, right: 40, bottom: 50, left: 70 },
+        width = 640 - margin.left - margin.right,
+        height = 480 - margin.top - margin.bottom;
 
-
-        var xScale = d3.scaleTime()
-            // .domain([d3.min(data, function(d) { return d.x; }), d3.max(data, function(d) { return d.x; })])
-            .domain(d3.extent(summedData,
-                function (d) {
-                    return d.x;
-                }))
-            .range([0, width]);
-
-        var yScale = d3.scaleLinear()
-            .domain([0, d3.max(summedData, function (d) { return d.sumData; }) + 1000])
-            .range([height, 0]);
-
-        // Define the line
-        var line = d3.line()
-            .x(function (d) { return xScale(d.x); })
-            .y(function (d) { return yScale(d.sumData); });
-
-        // Append the line to the SVG
-        svg.append("path")
-            .datum(summedData)
-            .attr("fill", "none")
-            .attr("stroke", "steelblue")
-            .attr("stroke-width", 2)
-            .attr("d", line);
-
-        svg.selectAll("circle")
-            .data(summedData)
-            .enter().append("circle")
-            .attr("cx", function (d) {
-                return xScale(d.x);
-            })
-            .attr("cy", function (d) {
-                return yScale(d.sumData);
-            })
-            .attr("r", 6)
-            .style("fill", "orange")
-            .on('mouseover',
-                function (d) {
-                    // const dateFormatter = d3.timeFormat("%Y")
-                    tooltip.style("visibility", "visible")
-                        .text("Year: " + dateFormatter(d.target.__data__.x) + ", Total sales: " + d.target.__data__.sumData)
-                        .style("top", (d.pageY - 10) + "px")
-                        .style("left", (d.pageX + 10) + "px");
-                }
-            )
-            .on('mouseout',
-                () => { tooltip.style("visibility", "hidden"); }
-            )
-            .on("click", function (d) {
-                clearChart();
-                selectedYearChart(d.target.__data__.x);
+    d3.csv("Electric_Vehicle_Population_Data.csv", function (d) {
+        return {
+            x: +d.year,
+            y: +d.vin
+        };
+    })
+        .then(function (data) {
+            // X and Y scales
+            const parseDate = d3.timeParse("%Y");
+            data.forEach(function (d) {
+                d.x = parseDate(d.x);
             });
 
-        svg.append("g")
-            // .attr("transform", "translate("+margin.left+","+margin.top+")")
-            .append("text")
-            .attr("text-anchor", "end")
-            .attr("font-size", 20)
-            .attr("font-weight", "bold")
-            .attr("x", (width / 2) + 55)
-            .attr("y", height + 45)
-            .text("Evaluation Year");
-        // Y axis label
-        svg.append("text")
-            .attr("text-anchor", "end")
-            .attr("font-size", 20)
-            .attr("font-weight", "bold")
-            .attr("transform", "rotate(-90)")
-            .attr("y", -50)
-            .attr("x", (-height / 2) + 65)
-            .text("Total Sales")
+            // Step 2: Group and sum the data for each year
+            const groupedData = d3.group(data, d => d.x);
+            const summedData = Array.from(groupedData, ([x, values]) => ({
+                x: x,
+                sumData: values.length
+            }));
 
-        const xAxis = d3.axisBottom(xScale);
-        xAxis.tickValues(summedData.map(d => d.x));
-        const formatTime = d3.timeFormat("%Y");
-        xAxis.tickFormat(formatTime);
-        svg.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(xAxis);
 
-        // Add Y-axis
-        svg.append("g")
-            .call(d3.axisLeft(yScale));
-    }).catch(function (error) {
-        // Handle error while reading the file
-        console.error("Error loading the data: " + error);
-    });
+            var xScale = d3.scaleTime()
+                // .domain([d3.min(data, function(d) { return d.x; }), d3.max(data, function(d) { return d.x; })])
+                .domain(d3.extent(summedData,
+                    function (d) {
+                        return d.x;
+                    }))
+                .range([0, width]);
+
+            var yScale = d3.scaleLinear()
+                .domain([0, d3.max(summedData, function (d) { return d.sumData; }) + 1000])
+                .range([height, 0]);
+
+            // Define the line
+            var line = d3.line()
+                .x(function (d) { return xScale(d.x); })
+                .y(function (d) { return yScale(d.sumData); });
+
+            // Append the line to the SVG
+            svg.append("path")
+                .datum(summedData)
+                .attr("fill", "none")
+                .attr("stroke", "steelblue")
+                .attr("stroke-width", 2)
+                .attr("d", line);
+
+            svg.selectAll("circle")
+                .data(summedData)
+                .enter().append("circle")
+                .attr("cx", function (d) {
+                    return xScale(d.x);
+                })
+                .attr("cy", function (d) {
+                    return yScale(d.sumData);
+                })
+                .attr("r", 6)
+                .style("fill", "orange")
+                .on('mouseover',
+                    function (d) {
+                        // const dateFormatter = d3.timeFormat("%Y")
+                        tooltip.style("visibility", "visible")
+                            .text("Year: " + dateFormatter(d.target.__data__.x) + ", Total sales: " + d.target.__data__.sumData)
+                            .style("top", (d.pageY - 10) + "px")
+                            .style("left", (d.pageX + 10) + "px");
+                    }
+                )
+                .on('mouseout',
+                    () => { tooltip.style("visibility", "hidden"); }
+                )
+                .on("click", function (d) {
+                    clearChart();
+                    selectedYearChart(d.target.__data__.x);
+                });
+
+            svg.append("g")
+                // .attr("transform", "translate("+margin.left+","+margin.top+")")
+                .append("text")
+                .attr("text-anchor", "end")
+                .attr("font-size", 20)
+                .attr("font-weight", "bold")
+                .attr("x", (width / 2) + 55)
+                .attr("y", height + 45)
+                .text("Evaluation Year");
+            // Y axis label
+            svg.append("text")
+                .attr("text-anchor", "end")
+                .attr("font-size", 20)
+                .attr("font-weight", "bold")
+                .attr("transform", "rotate(-90)")
+                .attr("y", -50)
+                .attr("x", (-height / 2) + 65)
+                .text("Total Sales")
+
+            const xAxis = d3.axisBottom(xScale);
+            xAxis.tickValues(summedData.map(d => d.x));
+            const formatTime = d3.timeFormat("%Y");
+            xAxis.tickFormat(formatTime);
+            svg.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+            // Add Y-axis
+            svg.append("g")
+                .call(d3.axisLeft(yScale));
+        }).catch(function (error) {
+            // Handle error while reading the file
+            console.error("Error loading the data: " + error);
+        });
+}
 
 function selectedYearChart(year) {
+    var margin = { top: 40, right: 40, bottom: 120, left: 70 },
+        width = 840 - margin.left - margin.right,
+        height = 480 - margin.top - margin.bottom;
 
     var svg = d3.select("#chart")
         .append("svg")
@@ -186,7 +198,7 @@ function selectedYearChart(year) {
                 .padding(0.65);
 
             var yScale = d3.scaleLinear()
-                .domain([0, d3.max(summedData, function (d) { return d.sumData; }) + 300])
+                .domain([0, d3.max(summedData, function (d) { return d.sumData; }) + 200])
                 .range([height, 0]);
 
             // Create the bars
@@ -218,9 +230,14 @@ function selectedYearChart(year) {
                     selectedMake(dateFormatter(year), d.target.__data__.x);
                 });
 
-            svg.append("g")
+                const xAxisGroup = svg.append("g")
                 .attr("transform", `translate(0, ${height})`)
-                .call(d3.axisBottom(xScale));
+                .call(d3.axisBottom(xScale))
+                .selectAll('text')
+                .attr('text-anchor', 'end') // Align text to the end of the tick
+                .attr('transform', 'rotate(-45)') // Rotate the text by -45 degrees
+                .attr('dx', '-10px') // Optional: Adjust horizontal position for better alignment
+                .attr('dy', '5px'); // Optional: Adjust vertical position for better alignment
 
             // Add Y-axis
             svg.append("g")
@@ -234,7 +251,7 @@ function selectedYearChart(year) {
                 .attr("font-size", 20)
                 .attr("font-weight", "bold")
                 .attr("x", (width / 2) + 55)
-                .attr("y", height + 45)
+                .attr("y", height + 100)
                 .text("Car Make");
             // Y axis label
             svg.append("text")
@@ -312,8 +329,8 @@ function selectedMake(year, make) {
                     function (d) {
                         // const dateFormatter = d3.timeFormat("%Y")
                         tooltip.style("visibility", "visible")
-                            .text("Year: " + year + ", Make: " + make+
-                                ", Model:" + d.toElement.__data__.data.x+
+                            .text("Year: " + year + ", Make: " + make +
+                                ", Model:" + d.toElement.__data__.data.x +
                                 ", Total sale:" + d.toElement.__data__.data.sumData)
                             .style("top", (d.pageY - 10) + "px")
                             .style("left", (d.pageX + 10) + "px");
