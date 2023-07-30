@@ -94,12 +94,12 @@ function EVLineGraphDecade() {
                     x: 644,
                     y: 45,
                     dx: -30,
-                    dy: -40
+                    dy: -40,
                 },
                 {
                     note: {
                         label: "Fall in Sale during Covid timeline",
-                        title: "Small spike in 2019 in all EV Sales",
+                        title: "small SPIKE in 2019 in all EV Sales",
                         wrap: 500,
                     },
                     connector: {
@@ -118,6 +118,34 @@ function EVLineGraphDecade() {
                     y: 309,
                     dx: 0,
                     dy: -60
+                },
+                {
+                    note: {
+                        title: "Click any Circle",
+                        align: "left",
+                        wrap: 100,
+                    },
+                    connector: {
+                        end: "dot",
+
+                    },
+                    x: 172,
+                    y: 410,
+                    dx: 10,
+                    dy: 10,
+                    color: ["orange"]
+                },
+                {
+                    note: {
+                        label: "To drill-down the Total Sales of EV per Year for each Make",
+                        wrap: 500,
+                        padding: 7,
+                    },
+                    x: 340,
+                    y: 430,
+                    dx: 0,
+                    dy: 0,
+                    color: ["blue"]
                 }
             ]
             // Add annotation to the chart
