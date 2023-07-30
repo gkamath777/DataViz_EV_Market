@@ -1,12 +1,9 @@
 // Set the dimensions of the canvas
-var margin = { top: 40, right: 40, bottom: 50, left: 70 },
-    width = 640 - margin.left - margin.right,
-    height = 480 - margin.top - margin.bottom,
-    radius = Math.min(width, height) / 2;
+
 
 const dateFormatter = d3.timeFormat("%Y");
 const color = d3.scaleOrdinal(d3.schemeCategory10);
-
+const parseDate = d3.timeParse("%Y");
 var tooltip = d3.select("body")
     .append("div")
     .attr("class", "tooltip")
@@ -15,27 +12,29 @@ var tooltip = d3.select("body")
     .style("visibility", "hidden");
 
 function clearChart() {
-    d3.select("#chart").select("svg").remove();
+    d3.select("#chart").selectAll("*").remove();
     tooltip.style("visibility", "hidden").text("");
     d3.select("body").style('cursor', 'default');
 }
 
-// Append the SVG object to the chart div
-var svg = d3.select("#chart")
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
 EVLineGraphDecade();
 // Read the CSV file
 function EVLineGraphDecade() {
-
-    // Set the dimensions of the canvas
+    // Append the SVG object to the chart div
     var margin = { top: 40, right: 40, bottom: 50, left: 70 },
         width = 640 - margin.left - margin.right,
         height = 480 - margin.top - margin.bottom;
+
+    var svg = d3.select("#chart")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    d3.select("#scene1").on("click", null);
+    d3.select("#scene2").attr("disabled", true);
+    d3.select("#scene3").attr("disabled", true);
 
     d3.csv("Electric_Vehicle_Population_Data.csv", function (d) {
         return {
@@ -108,7 +107,8 @@ function EVLineGraphDecade() {
                 )
                 .on("click", function (d) {
                     clearChart();
-                    selectedYearChart(d.target.__data__.x);
+                    d3.select("#scene2").attr("disabled", null);
+                    EVDataPerYear(d.target.__data__.x);
                 });
 
             svg.append("g")
@@ -145,12 +145,14 @@ function EVLineGraphDecade() {
             // Handle error while reading the file
             console.error("Error loading the data: " + error);
         });
+    d3.select("#narrative_text").text(`To be updated in scene 1`);
 }
 
-function selectedYearChart(year) {
-    var margin = { top: 40, right: 40, bottom: 120, left: 70 },
+function EVDataPerYear(year) {
+    console.log(year)
+    var margin = { top: 40, right: 40, bottom: 200, left: 70 },
         width = 840 - margin.left - margin.right,
-        height = 480 - margin.top - margin.bottom;
+        height = 680 - margin.top - margin.bottom;
 
     var svg = d3.select("#chart")
         .append("svg")
@@ -158,6 +160,15 @@ function selectedYearChart(year) {
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+    d3.select("#scene1").on("click", () => {
+        clearChart();
+        EVLineGraphDecade();
+    });
+
+    d3.select("#scene2").on("click", null);
+    d3.select("#scene3").attr("disabled", true);
 
     d3.csv("Electric_Vehicle_Population_Data.csv", function (d) {
         return {
@@ -227,10 +238,12 @@ function selectedYearChart(year) {
                 )
                 .on("click", function (d) {
                     clearChart();
+                    d3.select("#scene2").attr("disabled", null);
+                    d3.select("#scene3").attr("disabled", null);
                     selectedMake(dateFormatter(year), d.target.__data__.x);
                 });
 
-                const xAxisGroup = svg.append("g")
+            svg.append("g")
                 .attr("transform", `translate(0, ${height})`)
                 .call(d3.axisBottom(xScale))
                 .selectAll('text')
@@ -268,17 +281,33 @@ function selectedYearChart(year) {
         });
 
     d3.select("#narrative_text").text(`
-        To be updated
+        To be updated in scene 2
         `);
 }
 
 function selectedMake(year, make) {
+    var margin = { top: 40, right: 40, bottom: 50, left: 70 },
+        width = 640 - margin.left - margin.right,
+        height = 480 - margin.top - margin.bottom,
+        radius = Math.min(width, height) / 2;
+
     var svg = d3.select("#chart")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", `translate(${width / 2}, ${height / 2})`);
+
+    d3.select("#scene1").on("click", () => {
+        clearChart();
+        EVLineGraphDecade();
+    });
+
+    d3.select("#scene2").on("click", () => {
+        clearChart();
+        EVDataPerYear(parseDate(year));
+    });
+    d3.select("#scene3").on("click", null);
 
     d3.csv("Electric_Vehicle_Population_Data.csv", function (d) {
         return {
@@ -357,7 +386,5 @@ function selectedMake(year, make) {
             console.error("Error loading the data: " + error);
         });
 
-    d3.select("#narrative_text").text(`
-        To be updated
-        `);
+    d3.select("#narrative_text").text(`To be updated in scene 3`);
 }
