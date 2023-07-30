@@ -22,8 +22,8 @@ EVLineGraphDecade();
 function EVLineGraphDecade() {
     // Append the SVG object to the chart div
     var margin = { top: 40, right: 40, bottom: 50, left: 70 },
-        width = 640 - margin.left - margin.right,
-        height = 480 - margin.top - margin.bottom;
+        width = 840 - margin.left - margin.right,
+        height = 580 - margin.top - margin.bottom;
 
     var svg = d3.select("#chart")
         .append("svg")
@@ -43,6 +43,12 @@ function EVLineGraphDecade() {
         };
     })
         .then(function (data) {
+            // document.onmousemove = function(e){
+            //     var x = e.pageX;
+            //     var y = e.pageY;
+            //     e.target.title = "X is "+x+" and Y is "+y;
+            // };
+            // console.log(document.onmousemove);
             // X and Y scales
             const parseDate = d3.timeParse("%Y");
             data.forEach(function (d) {
@@ -74,6 +80,51 @@ function EVLineGraphDecade() {
                 .x(function (d) { return xScale(d.x); })
                 .y(function (d) { return yScale(d.sumData); });
 
+            // Features of the annotation
+            const annotations = [
+                {
+                    note: {
+                        label: "Tesla population is ~12K \n Vs Other Make all together",
+                        title: "SPIKE in all EV Sales including Tesla",
+                        wrap: 500,
+                    },
+                    connector: {
+                        end: "arrow",
+                    },
+                    x: 644,
+                    y: 45,
+                    dx: -30,
+                    dy: -40
+                },
+                {
+                    note: {
+                        label: "Fall in Sale during Covid timeline",
+                        title: "Small spike in 2019 in all EV Sales",
+                        wrap: 500,
+                    },
+                    connector: {
+                        end: "arrow",
+                    },
+                    x: 410,
+                    y: 299,
+                    dx: 30,
+                    dy: -50
+                },
+                {
+                    connector: {
+                        end: "arrow",
+                    },
+                    x: 440,
+                    y: 309,
+                    dx: 0,
+                    dy: -60
+                }
+            ]
+            // Add annotation to the chart
+            const makeAnnotations = d3.annotation()
+                .type(d3.annotationLabel)
+                .annotations(annotations)
+
             // Append the line to the SVG
             svg.append("path")
                 .datum(summedData)
@@ -81,6 +132,11 @@ function EVLineGraphDecade() {
                 .attr("stroke", "steelblue")
                 .attr("stroke-width", 2)
                 .attr("d", line);
+
+            // Annotation
+            svg.append("g")
+                .attr("class", "annotation-group")
+                .call(makeAnnotations);
 
             svg.selectAll("circle")
                 .data(summedData)
@@ -149,7 +205,6 @@ function EVLineGraphDecade() {
 }
 
 function EVDataPerYear(year) {
-    console.log(year)
     var margin = { top: 40, right: 40, bottom: 200, left: 70 },
         width = 840 - margin.left - margin.right,
         height = 680 - margin.top - margin.bottom;
@@ -240,7 +295,7 @@ function EVDataPerYear(year) {
                     clearChart();
                     d3.select("#scene2").attr("disabled", null);
                     d3.select("#scene3").attr("disabled", null);
-                    selectedMake(dateFormatter(year), d.target.__data__.x);
+                    EVDataPerMakePerYear(dateFormatter(year), d.target.__data__.x);
                 });
 
             svg.append("g")
@@ -285,7 +340,7 @@ function EVDataPerYear(year) {
         `);
 }
 
-function selectedMake(year, make) {
+function EVDataPerMakePerYear(year, make) {
     var margin = { top: 40, right: 40, bottom: 50, left: 70 },
         width = 640 - margin.left - margin.right,
         height = 480 - margin.top - margin.bottom,
