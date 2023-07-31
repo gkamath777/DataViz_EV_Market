@@ -230,7 +230,7 @@ function EVLineGraphDecade() {
     d3.select("#narrative_text")
         .text(`This page explains the evolution of the Non-Tesla Electric Vehicle Population in the USA over the last 10 Years (Decade). 
         The change in sales from 1997 from one electric vehicle to 23000+ vehicles sold in the year 2022 from a single car manufacturer to 35+ car manufacturers. 
-        But Tesla's population in the EV market is comparatively higher (>50% Market share) than other Car Manufacturers altogether. 
+        But Tesla's population in the EV market is comparatively higher ( >50% Market share) than other Car Manufacturers altogether. 
         This page gives pictorial data of other Car manufacturers that evolved over a decade.
         Each data point(Orange Circle) in the above Line Graph provides a Total Sales of EV vehicles for each year.
         The above graph represents a small spike in 2019, but again there was a fall in sales due to Covid. But there was a sharp spike in increase of Sales in 2022.`);
@@ -337,7 +337,7 @@ function EVDataPerYear(year) {
                         return d.x;
                     }))
                 .range([0, width])
-                .padding(0.65);
+                .padding(0.28);
 
             var yScale = d3.scaleLinear()
                 .domain([0, d3.max(summedData, function (d) { return d.sumData; }) + 200])
