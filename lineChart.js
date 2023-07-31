@@ -4,6 +4,7 @@
 const dateFormatter = d3.timeFormat("%Y");
 const color = d3.scaleOrdinal(d3.schemeCategory10);
 const parseDate = d3.timeParse("%Y");
+
 var tooltip = d3.select("body")
     .append("div")
     .attr("class", "tooltip")
@@ -18,6 +19,7 @@ function clearChart() {
 }
 
 EVLineGraphDecade();
+
 // Read the CSV file
 function EVLineGraphDecade() {
     // Append the SVG object to the chart div
@@ -77,7 +79,7 @@ function EVLineGraphDecade() {
             const annotations = [
                 {
                     note: {
-                        label: "Tesla population is ~12K \n Vs Other Make all together",
+                        label: "Tesla population is ~12K \n Vs Other Make altogether",
                         title: "SPIKE in all EV Sales including Tesla",
                         wrap: 500,
                     },
@@ -226,7 +228,12 @@ function EVLineGraphDecade() {
         .text('Total Sales of Non-Tesla EV Vehicles in the last One Decade')
         .style('font-weight', 'bold');
     d3.select("#narrative_text")
-        .text(`To be updated in scene 1`);
+        .text(`This page explains the evolution of the Non-Tesla Electric Vehicle Population in the USA over the last 10 Years (Decade). 
+        The change in sales from 1997 from one electric vehicle to 23000+ vehicles sold in the year 2022 from a single car manufacturer to 35+ car manufacturers. 
+        But Tesla's population in the EV market is comparatively higher (>50% Market share) than other Car Manufacturers altogether. 
+        This page gives pictorial data of other Car manufacturers that evolved over a decade.
+        Each data point(Orange Circle) in the above Line Graph provides a Total Sales of EV vehicles for each year.
+        The above grpah represents a small spike in 2019, but again there was fall in sale due to Covid. But there was a sharp spike in increase of Sales in 2022.`);
 }
 
 function EVDataPerYear(year) {

@@ -24,6 +24,11 @@ body {
   align-items: center;
 }
 
+#narrative_text {
+  padding: 5px;
+  padding-top:15px;
+
+}
 
 #scene1, #scene2, #scene3 {
   display: inline-block;
