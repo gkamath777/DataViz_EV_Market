@@ -222,7 +222,11 @@ function EVLineGraphDecade() {
             // Handle error while reading the file
             console.error("Error loading the data: " + error);
         });
-    d3.select("#narrative_text").text(`To be updated in scene 1`);
+    d3.select("#sub-title")
+        .text('Total Sales of Non-Tesla EV Vehicles in the last One Decade')
+        .style('font-weight', 'bold');
+    d3.select("#narrative_text")
+        .text(`To be updated in scene 1`);
 }
 
 function EVDataPerYear(year) {
@@ -287,7 +291,7 @@ function EVDataPerYear(year) {
                         end: "arrow",
                     },
                     x: 644,
-                    y: 355,
+                    y: 390,
                     dx: -30,
                     dy: -40,
                 },
@@ -430,6 +434,9 @@ function EVDataPerYear(year) {
             console.error("Error loading the data: " + error);
         });
 
+    d3.select("#sub-title")
+        .text('Total Sales of Non-Tesla EV Vehicles in ' + dateFormatter(year))
+        .style('font-weight', 'bold');
     d3.select("#narrative_text").text(`
         To be updated in scene 2
         `);
@@ -492,7 +499,7 @@ function EVDataPerMakePerYear(year, make) {
             const annotations = [
                 {
                     note: {
-                        title: "Total sale of EV in " + make + " across multiple Models in " + year,
+                        title: "Pie Chart representing total sale of EV in " + make + " across multiple Models in " + year,
                         label: "",
                         align: "middle",
                         wrap: 500,
@@ -561,5 +568,8 @@ function EVDataPerMakePerYear(year, make) {
             console.error("Error loading the data: " + error);
         });
 
+    d3.select("#sub-title")
+        .text('Total Sales of different EV models of ' + make +' in ' + year)
+        .style('font-weight', 'bold');
     d3.select("#narrative_text").text(`To be updated in scene 3`);
 }

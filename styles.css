@@ -1,11 +1,22 @@
 #title {
-  color: rgba(106, 0, 255, 0.446); /* Sets the text color to blue */
-  font-size: 18px; /* Sets the font size to 18 pixels */
-  background-color: rgb(0, 242, 255); /* Sets the background color to yellow */
+  color: rgba(136, 80, 205, 0.799); /* Sets the text color to blue */
+  font-size: 20px; /* Sets the font size to 18 pixels */
+  background-color: rgba(179, 226, 232, 0.184); 
   padding: 10px; /* Adds 10 pixels of padding around the content */
-  border: 2px solid black; /* Adds a 2-pixel black border */
+  /* border: 2px solid black;  */
   text-align: center; /* Centers the text horizontally */
+  border-radius: 10px; 
+  font-weight: bold;
 }
+
+body {
+  border-radius: 5px;
+  border: 2px solid rgb(183, 196, 227);
+  padding: 10px;
+  background-color: rgba(206, 228, 231, 0.184);
+  /* background-color: #92818ed1; */
+}
+
 
 #chart {
   display: flex;
