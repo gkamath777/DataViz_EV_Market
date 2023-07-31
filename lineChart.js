@@ -43,13 +43,6 @@ function EVLineGraphDecade() {
         };
     })
         .then(function (data) {
-            // document.onmousemove = function(e){
-            //     var x = e.pageX;
-            //     var y = e.pageY;
-            //     e.target.title = "X is "+x+" and Y is "+y;
-            // };
-            // console.log(document.onmousemove);
-            // X and Y scales
             const parseDate = d3.timeParse("%Y");
             data.forEach(function (d) {
                 d.x = parseDate(d.x);
@@ -352,7 +345,6 @@ function EVDataPerYear(year) {
                 .range([0, width]);
 
             const averageY = d3.mean(summedData, d => d.sumData);
-            console.log('Average of Y values:', averageY);
 
             var line = d3.line()
                 .x(function (d) { return xScale1(d.x); })
@@ -417,7 +409,6 @@ function EVDataPerYear(year) {
 
 
             svg.append("g")
-                // .attr("transform", "translate("+margin.left+","+margin.top+")")
                 .append("text")
                 .attr("text-anchor", "end")
                 .attr("font-size", 20)
