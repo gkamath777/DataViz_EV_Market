@@ -233,13 +233,13 @@ function EVLineGraphDecade() {
         But Tesla's population in the EV market is comparatively higher (>50% Market share) than other Car Manufacturers altogether. 
         This page gives pictorial data of other Car manufacturers that evolved over a decade.
         Each data point(Orange Circle) in the above Line Graph provides a Total Sales of EV vehicles for each year.
-        The above grpah represents a small spike in 2019, but again there was fall in sale due to Covid. But there was a sharp spike in increase of Sales in 2022.`);
+        The above graph represents a small spike in 2019, but again there was a fall in sales due to Covid. But there was a sharp spike in increase of Sales in 2022.`);
 }
 
 function EVDataPerYear(year) {
-    var margin = { top: 40, right: 40, bottom: 150, left: 70 },
+    var margin = { top: 10, right: 40, bottom: 110, left: 70 },
         width = 840 - margin.left - margin.right,
-        height = 680 - margin.top - margin.bottom;
+        height = 660 - margin.top - margin.bottom;
 
     var svg = d3.select("#chart")
         .append("svg")
@@ -298,7 +298,7 @@ function EVDataPerYear(year) {
                         end: "arrow",
                     },
                     x: 644,
-                    y: 390,
+                    y: 440,
                     dx: -30,
                     dy: -40,
                 },
@@ -445,8 +445,11 @@ function EVDataPerYear(year) {
         .text('Total Sales of Non-Tesla EV Vehicles in ' + dateFormatter(year))
         .style('font-weight', 'bold');
     d3.select("#narrative_text").text(`
-        To be updated in scene 2
-        `);
+    This page drill-down the data to the selected year. For the respective selected year, 
+    A bar graph is shown, where each bar represents an EV Car Manufacturer, and each value in the Bar, 
+    is the total number of EV vehicles sold per Make.
+    If we review the bar graph, the number of manufacturers sold more than the average EV vehicle sold per year is very less (< 25%). 
+    There is more evolution still needed from most EV manufacturers.`);
 }
 
 function EVDataPerMakePerYear(year, make) {
@@ -576,7 +579,11 @@ function EVDataPerMakePerYear(year, make) {
         });
 
     d3.select("#sub-title")
-        .text('Total Sales of different EV models of ' + make +' in ' + year)
+        .text('Total Sales of different EV models of ' + make + ' in ' + year)
         .style('font-weight', 'bold');
-    d3.select("#narrative_text").text(`To be updated in scene 3`);
+    d3.select("#narrative_text")
+    .text(`
+    The Pie chart displays the total sales of EV vehicles sold across multiple models of specific Make.
+    The Trend with most of the Make is, a set of one or two models has more population than the other models. 
+    `);
 }
